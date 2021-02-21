@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 
-# author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
+# author:       Li Junhao           l@x-cmd.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
 
-xrc std/dict/v0
+xrc dict/v0
