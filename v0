@@ -9,12 +9,22 @@
 
 dict_alias(){
     alias dnew="dict_new"
-    alias dput="dict_pput"
+    alias dput="dict_pput" #    dict_put_p
     alias dget="dict_pget"
+
+    # default  o.dropr
+
+    # rm: remove the key
     alias ddrop="dict_pdrop"
+
+    # drop: pattern: key, value
+    # drop key
+    # drop - key
     alias ddropr="dict_pdropr"
-    alias dgrep="dict_pgrep"
-    alias dgrepr="dict_pgrepr"
+
+    # 
+    # alias dgrep="dict_pgrep"
+    alias dgrep="dict_pgrepr"
 
     alias ddump="dict_idump"
     alias dload="dict_iload"
