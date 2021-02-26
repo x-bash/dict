@@ -71,7 +71,7 @@ dict_scope(){
     printf "%s" "$i"
 }
 
-dict_drop(){
+dict_remove(){
     : "${O:?Please provide object name}"
     local IFS="${DICT_KEYS_SEP}"
     local s
@@ -85,7 +85,7 @@ dict_drop(){
     done
 }
 
-dict_dropr(){
+dict_drop(){
     : "${O:?Please provide object name}"
     local IFS="${DICT_KEYS_SEP}"
     local s
