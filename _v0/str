@@ -51,7 +51,7 @@ dict_scope(){
     eval printf "%s" "\"\$${O}\"" | dict_pscope "$@"
 }
 
-dict_drop(){
+dict_remove(){
     : "${O:?Please provide object name}"
     local O="${O:?list_name}"
     local s
@@ -62,7 +62,7 @@ dict_drop(){
     fi    
 }
 
-dict_dropr(){
+dict_drop(){
     : "${O:?Please provide object name}"
     local O="${O:?list_name}"
     local s
