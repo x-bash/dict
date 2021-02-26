@@ -107,22 +107,8 @@ dict_grep(){
     s=$(printf "%s${DICT_KEYS_SEP}" "$*")
 
     for key in eval "\${\!$O[@]}"; do
-        if [[ ! "$key" == "$s" ]]; then
-            eval "unset \$O[\$key]"
-            break
-        fi
-    done
-}
-
-dict_grepr(){
-    : "${O:?Please provide object name}"
-    local IFS="${DICT_KEYS_SEP}"
-    local s
-    s=$(printf "%s${DICT_KEYS_SEP}" "$*")
-
-    for key in eval "\${\!$O[@]}"; do
-        if [[ ! "$key" =~ $s ]]; then
-            eval "unset \$O[\$key]"
+        if [[ "$key" =~ $s ]]; then
+            eval "echo \"\$O[\$key]\""
             break
         fi
     done
