@@ -1,8 +1,8 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
-. dict
-. "${IMPLMENTATION:-dict_str}"
-. assert
+. v0
+. "${IMPLMENTATION:-_v0/str}"
+xrc assert
 
 test_dict_setup(){
     dict_make b
@@ -22,29 +22,29 @@ test_dict_size(){
     assert "$(O=b dict_size)" = 3
 }
 
-test_dict_isempty(){
+test_dict_is_empty(){
     dict_make b
-    assert_t O=b dict_isempty
+    assert_t O=b dict_is_empty
     O=b dict_put 1 a
-    assert_f O=b dict_isempty
+    assert_f O=b dict_is_empty
 }
 
-testdict_pget(){
+test_dict_pget(){
     test_dict_setup
     assert "$(O=b dict_get 2)" = b
 }
 
-testdict_pscope(){
+test_dict_pscope(){
     dict_make b
     O=b dict_put el user edwinjhlee
     O=b dict_put lt user lteam
     O=b dict_put el password goforit
     O=b dict_put lt password 2008
-    assert_stdout "O=b dict_scope el | dict_print" <<A
+    assert_stdout "O=b dict_scope el | dict_pprint" <<A
 user=edwinjhlee
 password=goforit
 A
-    assert_stdout "O=b dict_scope lt | dict_json" <<A
+    assert_stdout "O=b dict_scope lt | dict_pjson" <<A
 {
   "user": "lteam",
   "password": "2008"
@@ -53,24 +53,26 @@ A
 
 }
 
-testdict_premove(){
+test_dict_premove(){
     test_dict_setup
-    assert_f O=b dict_drop 4
+    assert_f O=b dict_remove 4
     assert_t O=b dict_has 2
     O=b dict_drop 2
     assert_f O=b dict_has 2
 }
 
-testdict_pdrop(){
+test_dict_pdrop(){
     test_dict_setup
-    assert_t O=b dict_dropr "[1-3]+"
+    assert_t O=b dict_drop "[1-3]+"
     assert_f O=b dict_has 1
-    assert_f O=b dict_has 3
+    assert_f O=b dict_has 5
 }
 
-cat "$0" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\){/, "", $0); print $0 }' | while read -r line; do
+
+
+cat "${BASH_SOURCE[0]}" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\){/, "", $0); print $0 }' | while read -r line; do
     if ! eval "$line"; then
-        echo "fail at function: $line" >&2
+        echo "======= fail at function: $line" >&2
         break
     fi
 done
