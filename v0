@@ -15,19 +15,13 @@ dict_alias(){
     # default  o.dropr
 
     # rm: remove the key
-    alias ddrop="dict_pdrop"
+    alias dremove="dict_premove"
 
     # drop: pattern: key, value
     # drop key
     # drop - key
-    alias ddropr="dict_pdropr"
-
-    # 
-    # alias dgrep="dict_pgrep"
-    alias dgrep="dict_pgrepr"
-
-    alias ddump="dict_idump"
-    alias dload="dict_iload"
+    alias ddrop="dict_pdrop"
+    alias dgrep="dict_pgrep"
 }
 
 dict_new(){
@@ -76,15 +70,15 @@ dict_print(){
 }
 
 dict_pgrep(){
-    AWK_CODE="keyline == key" dict_pdrop "$@"
+    AWK_CODE="( keyline ~ key )" dict_premove "$@"
 }
 
-dict_pdropr() {
-    AWK_CODE="! (keyline ~ key)" dict_pdrop "$@"
+dict_pdrop() {
+    AWK_CODE="! (keyline ~ key)" dict_premove "$@"
 }
 
 # drop_by_idx, drop_by_regex, drop_by_glob
-dict_pdrop() {
+dict_premove() {
     [ $# -eq 0 ] && printf "%s\n" "Accept more than one argument." >&2
 
     local IFS="${DICT_KEYS_SEP}"
