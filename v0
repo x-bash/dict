@@ -35,12 +35,17 @@ dict_new(){
 }
 
 dict_delete(){
-    local O="${1:?list_name}"
+    local O="${1:?Please provide dict_name for dict_delete}"
 
     for f in dump load has size put get grep grepr drop dropr json print; do
         alias "$O.$f="
     done
     alias "$O.delete="
+}
+
+dict_free(){
+    local O="${1:?Please provide dict_name for dict_free}"
+    eval "$O="
 }
 
 # 001 for \n
@@ -289,7 +294,7 @@ dict_pprint(){
 
 # . ./dict_str
 
-# xrc dict/_v0/str
+xrc dict/_v0/str
 
 # if [ -n "${BASH_VERSION}" ]; then
 #     case "${BASH_VERSION}" in

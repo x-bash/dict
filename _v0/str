@@ -8,6 +8,11 @@ dict_make(){
     eval "$O=0"
 }
 
+dict_clear(){
+    local O="${1:?Please provide object name}"
+    eval "$O=0"
+}
+
 # O=b dload "$( a.dump | dgrep "abc" | dgerp "abc" )"
 
 dict_dump(){
