@@ -110,7 +110,7 @@ dict_scope(){
 }
 
 dict_remove(){
-    : "${O:?Please provide object name}"
+        : "${O:?Please provide object name}"
     local IFS="${DICT_KEYS_SEP}"
     local s
     s=$(printf "%s" "$*")
@@ -119,14 +119,15 @@ dict_remove(){
     local sss
     sss="$(eval echo "\"\${!"$O"[*]}\"")"
 
+    local code=1
     local key
     for key in $sss; do
-        if [[ "$key" == "$s" ]]; then
-            eval "unset \$O[\$key]"
-            return 0
+        if [[ "$key" = "$s" ]]; then
+            eval "unset $O[\'\$key\']"
+            code=0
         fi
     done
-    return 1
+    return "$code"
 }
 
 dict_drop(){
@@ -143,7 +144,9 @@ dict_drop(){
     local key
     for key in $sss; do
         if [[ "$key" =~ $s ]]; then
-            eval "unset \$O[\$key]"
+            # echo "1231132"
+            # echo "!!---! unset $O[\"\$key\"]"
+            eval "unset $O[\'\$key\']"
             code=0
         fi
     done

@@ -293,22 +293,24 @@ dict_pprint(){
 }
 
 # . ./_v0/str
-. ./_v0/bash4
+# . ./_v0/bash4
 
 # xrc dict/_v0/str
 
 
-# if [ -n "${BASH_VERSION}" ]; then
-#     case "${BASH_VERSION}" in
-#         3*)     
-#             xrc dict/_v0/str    ;;
-#         *)      
-#             xrc dict/_v0/str;
-#             #xrc dict/_v0/bash4   
-#         ;;
-#     esac
-# elif [ -n "${ZSH_VERSION}" ]; then
-#     xrc dict/_v0/zsh
-# else
-#     xrc dict/std/str
-# fi
+if [ -n "${BASH_VERSION}" ]; then
+    case "${BASH_VERSION}" in
+        3*)     
+            xrc dict/_v0/str    ;;
+        *)      
+            # xrc dict/_v0/str;
+            # xrc dict/_v0/bash4
+            echo "!!!!" >&2
+            . _v0/bash4  
+        ;;
+    esac
+elif [ -n "${ZSH_VERSION}" ]; then
+    xrc dict/_v0/zsh
+else
+    xrc dict/std/str
+fi

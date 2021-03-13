@@ -9,6 +9,7 @@ test_dict_setup(){
     dict_make b
     O=b dict_put 1 a
     O=b dict_put 2 b
+    O=b dict_put "2 \" 3 " b
     O=b dict_put 3 c
 }
 
@@ -20,7 +21,7 @@ test_dict_has(){
 
 test_dict_size(){
     test_dict_setup
-    assert "$(O=b dict_size)" = 3
+    assert "$(O=b dict_size)" = 4
 }
 
 test_dict_is_empty(){
@@ -75,6 +76,7 @@ test_dict_pdrop(){
 
 
 cat "${BASH_SOURCE[0]}" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\)\{/, "", $0); print $0 }' | while read -r line; do
+    echo "Testing Function: $line"
     if ! eval "$line"; then
         echo "======= fail at function: $line" >&2
         break
