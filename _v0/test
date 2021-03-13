@@ -1,10 +1,11 @@
 #! /usr/bin/env bash
 
 . v0
-. "${IMPLMENTATION:-_v0/str}"
+# . "${IMPLMENTATION:-_v0/str}"
 xrc assert
 
 test_dict_setup(){
+    unset b
     dict_make b
     O=b dict_put 1 a
     O=b dict_put 2 b
@@ -23,6 +24,7 @@ test_dict_size(){
 }
 
 test_dict_is_empty(){
+    unset b
     dict_make b
     assert_t O=b dict_is_empty
     O=b dict_put 1 a
@@ -35,7 +37,9 @@ test_dict_pget(){
 }
 
 test_dict_pscope(){
+    unset b
     dict_make b
+    # declare -p b
     O=b dict_put el user edwinjhlee
     O=b dict_put lt user lteam
     O=b dict_put el password goforit
@@ -70,7 +74,7 @@ test_dict_pdrop(){
 
 
 
-cat "${BASH_SOURCE[0]}" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\){/, "", $0); print $0 }' | while read -r line; do
+cat "${BASH_SOURCE[0]}" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\)\{/, "", $0); print $0 }' | while read -r line; do
     if ! eval "$line"; then
         echo "======= fail at function: $line" >&2
         break

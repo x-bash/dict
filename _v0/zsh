@@ -3,20 +3,34 @@
 # author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
 
-dict_make(){
-    local O="${1:?Please provide object name}"
-    eval "declare -A $O=()"
-}
+# dict_make(){
+#     local O="${1:?Please provide object name}"
+#     unset "$O"
+#     eval "declare -A $O=()"
+#     eval "declare -p $O"
+# }
+
+alias dict_make="declare -gA"
 
 # O=b dload "$( a.dump | dgrep "abc" | dgerp "abc" )"
+
+dict_clear(){
+    local O="${O:?Please provide object name}"
+    eval "declare -A $O=()"
+}
 
 dict_dump(){
     local O="${O:?Please provide object name}"
     local key
     local val
     local i=0
-    for key in eval "\${\!$O[@]}"; do
-        val="$(eval "\${\$O[\$key]}")"
+
+    IFS="${DICT_SEP}"
+    local sss
+    sss="$(eval echo "\"\${!"$O"[*]}\"")"
+
+    for key in $sss; do
+        val="$(eval echo "\"\${$O[$key]}\"")"
         printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
         i=$((i+1))
     done
@@ -39,17 +53,36 @@ dict_load(){
 }
 
 dict_size(){
-    printf "%s" "$(eval "$O[#@]")"
+    : "${O:?Please provide object name}"
+    # printf "%s" "$(eval "\$$O[#@]")"
+    eval printf "%s" "\"\${#${O}[@]}\""
 }
 
 dict_get(){
     : "${O:?Please provide object name}"
-    eval printf "%s" "\"\${${O}[$1]}\""
+    local IFS="${DICT_KEYS_SEP}"
+    local key="$*"
+
+    local s
+    s="$(eval printf "%s" "\"\${${O}[$key]}\"")"
+    # echo ----- "\"\${${O}[$key]}\"" >&2
+    if [ -n "$s" ]; then
+        echo "$s"
+    else
+        return 1
+    fi
 }
 
 dict_put(){
     : "${O:?Please provide object name}"
-    eval "${O}[$1]}"="$2"
+    local IFS="${DICT_KEYS_SEP}"
+    local key="$*"
+    local val="${key##*${DICT_KEYS_SEP}}"
+    key="${key%${DICT_KEYS_SEP}*}"
+
+    # echo "---> $key" >&2
+    # echo "${O}[\"\$key\"]"="\"\$val\"" >&2
+    eval "${O}[\"\$key\"]"="\"\$val\""
 }
 
 # Not universal enough
@@ -61,42 +94,60 @@ dict_scope(){
 
     local key
     local i=0
-    for key in eval "\${\!$O[@]}"; do
+    IFS="${DICT_SEP}"
+    local sss
+    sss="$(eval echo "\"\${!"$O"[*]}\"")"
+
+    for key in $sss; do
+        # echo "!!! $key" >&2
         if [[ "$key" == "$s"* ]]; then
-            val="$(eval "\${\$O[\$key]}")"
-            printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
+            val="$(eval echo "\"\${$O[\$key]}\"")"
+            printf "%s${DICT_SEP}%s${DICT_SEP}" "${key#$s}" "$val"
             i=$((i+1))
         fi
     done
     printf "%s" "$i"
 }
 
+dict_remove(){
+    : "${O:?Please provide object name}"
+    local IFS="${DICT_KEYS_SEP}"
+    local s
+    s=$(printf "%s" "$*")
+
+    IFS="${DICT_SEP}"
+    local sss
+    sss="$(eval echo "\"\${!"$O"[*]}\"")"
+
+    local key
+    for key in $sss; do
+        if [[ "$key" == "$s" ]]; then
+            eval "unset \$O[\$key]"
+            return 0
+        fi
+    done
+    return 1
+}
+
 dict_drop(){
     : "${O:?Please provide object name}"
     local IFS="${DICT_KEYS_SEP}"
     local s
-    s=$(printf "%s${DICT_KEYS_SEP}" "$*")
+    s=$(printf "%s" "$*")
 
-    for key in eval "\${\!$O[@]}"; do
-        if [[ "$key" == "$s" ]]; then
-            eval "unset \$O[\$key]"
-            break
-        fi
-    done
-}
+    IFS="${DICT_SEP}"
+    local sss
+    sss="$(eval echo "\"\${!"$O"[*]}\"")"
 
-dict_dropr(){
-    : "${O:?Please provide object name}"
-    local IFS="${DICT_KEYS_SEP}"
-    local s
-    s=$(printf "%s${DICT_KEYS_SEP}" "$*")
-
-    for key in eval "\${\!$O[@]}"; do
+    local code=1
+    local key
+    for key in $sss; do
         if [[ "$key" =~ $s ]]; then
             eval "unset \$O[\$key]"
-            break
+            code=0
         fi
     done
+    return "$code"
 }
 
 
@@ -107,22 +158,8 @@ dict_grep(){
     s=$(printf "%s${DICT_KEYS_SEP}" "$*")
 
     for key in eval "\${\!$O[@]}"; do
-        if [[ ! "$key" == "$s" ]]; then
-            eval "unset \$O[\$key]"
-            break
-        fi
-    done
-}
-
-dict_grepr(){
-    : "${O:?Please provide object name}"
-    local IFS="${DICT_KEYS_SEP}"
-    local s
-    s=$(printf "%s${DICT_KEYS_SEP}" "$*")
-
-    for key in eval "\${\!$O[@]}"; do
-        if [[ ! "$key" =~ $s ]]; then
-            eval "unset \$O[\$key]"
+        if [[ "$key" =~ $s ]]; then
+            eval "echo \"\$O[\$key]\""
             break
         fi
     done

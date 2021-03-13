@@ -3,13 +3,15 @@
 # author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
 
-dict_make(){
+_dict_make(){
     local O="${1:?Please provide object name}"
     eval "$O=0"
 }
 
+alias dict_make=_dict_make
+
 dict_clear(){
-    local O="${1:?Please provide object name}"
+    local O="${O:?Please provide object name}"
     eval "$O=0"
 }
 

@@ -292,9 +292,11 @@ dict_pprint(){
         ' -
 }
 
-# . ./dict_str
+# . ./_v0/str
+. ./_v0/bash4
 
-xrc dict/_v0/str
+# xrc dict/_v0/str
+
 
 # if [ -n "${BASH_VERSION}" ]; then
 #     case "${BASH_VERSION}" in
