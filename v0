@@ -70,6 +70,16 @@ dict_json(){
     dict_dump | dict_pjson "$@"
 }
 
+dict_dump_json(){
+    dict_dump | dict_pjson
+}
+
+dict_load_json(){
+    dict_load <<A
+$(dict_pjsonparse)
+A
+}
+
 dict_print(){
     dict_dump | dict_pprint "$@"
 }
