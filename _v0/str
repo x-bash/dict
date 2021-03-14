@@ -26,11 +26,7 @@ dict_load(){
     local O="${O:?Please provide object name}"
     local s
     s="$(cat)"
-    echo "$s"
-    echo "$O"='"$s"'
     eval "$O"='"$s"'
-
-    eval echo "\$$O"
 }
 
 dict_size(){
