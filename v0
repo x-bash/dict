@@ -278,6 +278,11 @@ dict_pjson(){
     ' -
 }
 
+dict_pjsonparse(){
+    awk -v op=flat-leaf -f "$(xrc which json/v0_walk.awk)" \
+        | awk 'BEGIN{ORS="\003"} { print substr($2,2,length($2)-2) "\003" substr($4,2,length($4)-2) } END{ print NR }'
+}
+
 dict_pprint(){
     {
         printf "${ITEM_SEP:-"\\n"}${DICT_SEP}${KV_SEP:-"="}${DICT_SEP}"  
