@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-. v0
+. ./v0
 # . "${IMPLMENTATION:-_v0/str}"
 xrc assert
 
@@ -9,19 +9,19 @@ test_dict_setup(){
     dict_make b
     O=b dict_put 1 a
     O=b dict_put 2 b
-    O=b dict_put "2 \" 3 " b
     O=b dict_put 3 c
+    # echo ${(kv)b}
 }
 
 test_dict_has(){
-    test_dict_setup
+    test_dict_setup 
     assert_t O=b dict_has 2
     assert_f O=b dict_has 4
 }
 
 test_dict_size(){
     test_dict_setup
-    assert "$(O=b dict_size)" = 4
+    assert "$(O=b dict_size)" = 3
 }
 
 test_dict_is_empty(){
@@ -37,26 +37,27 @@ test_dict_pget(){
     assert "$(O=b dict_get 2)" = b
 }
 
-test_dict_pscope(){
-    unset b
-    dict_make b
-    # declare -p b
-    O=b dict_put el user edwinjhlee
-    O=b dict_put lt user lteam
-    O=b dict_put el password goforit
-    O=b dict_put lt password 2008
-    assert_stdout "O=b dict_scope el | dict_pprint" <<A
-user=edwinjhlee
-password=goforit
-A
-    assert_stdout "O=b dict_scope lt | dict_pjson" <<A
-{
-  "user": "lteam",
-  "password": "2008"
-}
-A
+# test_dict_pscope(){
+#     unset b
+#     dict_make b
+#     # declare -p b
+#     O=b dict_put el user edwinjhlee
+#     O=b dict_put lt user lteam
+#     O=b dict_put el password goforit
+#     O=b dict_put lt password 2008
+#     echo ${b[@]} 
+#     assert_stdout "O=b dict_scope el | dict_pprint" <<A
+# user=edwinjhlee
+# password=goforit
+# A
+#     assert_stdout "O=b dict_scope lt | dict_pjson" <<A
+# {
+#   "user": "lteam",
+#   "password": "2008"
+# }
+# A
 
-}
+# }
 
 test_dict_premove(){
     test_dict_setup
@@ -68,14 +69,12 @@ test_dict_premove(){
 
 test_dict_pdrop(){
     test_dict_setup
-    assert_t O=b dict_drop "[1-3]+"
+    assert_t O=b dict_drop "\"[1-3]+\""
     assert_f O=b dict_has 1
     assert_f O=b dict_has 5
 }
 
-
-
-cat "${BASH_SOURCE[0]}" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\)\{/, "", $0); print $0 }' | while read -r line; do
+cat "./_v0/test" | awk '$0~/^test_[^\(]+\(\)/{ gsub(/\(\)\{/, "", $0); print $0 }' | while read -r line; do
     echo "Testing Function: $line"
     if ! eval "$line"; then
         echo "======= fail at function: $line" >&2

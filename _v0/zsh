@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+# shellcheck shell=zsh
 
 # author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
@@ -64,8 +64,8 @@ dict_get(){
     local key="$*"
 
     local s
-    s="$(eval printf "%s" "\"\${${O}[$key]}\"")"
-    # echo ----- "\"\${${O}[$key]}\"" >&2
+    s="$(eval printf %s "\"\${${O}[$key]}\"")"
+
     if [ -n "$s" ]; then
         echo "$s"
     else
@@ -80,9 +80,10 @@ dict_put(){
     local val="${key##*${DICT_KEYS_SEP}}"
     key="${key%${DICT_KEYS_SEP}*}"
 
-    # echo "---> $key" >&2
-    # echo "${O}[\"\$key\"]"="\"\$val\"" >&2
-    eval "${O}[\"\$key\"]"="\"\$val\""
+    # echo "${O}[\$key]"="\"\$val\"" >&2
+    # echo "${O}+=(\"$key\"" "\"$val\")" >&2
+    # eval "${O}+=(\"$key\"" "\"$val\")"
+    eval "${O}[\$key]"="\"\$val\""
 }
 
 # Not universal enough
@@ -116,14 +117,12 @@ dict_remove(){
     s=$(printf "%s" "$*")
 
     IFS="${DICT_SEP}"
-    local sss
-    sss="$(eval echo "\"\${!"$O"[*]}\"")"
 
     local code=1
     local key
-    for key in $sss; do
+    for key in $(eval printf %s "\"\${(k)"$O"[*]}\""); do
         if [[ "$key" = "$s" ]]; then
-            eval "unset $O[\'\$key\']"
+            eval "unset \"${O}[$key]\""
             code=0
         fi
     done
@@ -135,18 +134,15 @@ dict_drop(){
     local IFS="${DICT_KEYS_SEP}"
     local s
     s=$(printf "%s" "$*")
+    # echo "$s"
 
     IFS="${DICT_SEP}"
-    local sss
-    sss="$(eval echo "\"\${!"$O"[*]}\"")"
 
     local code=1
     local key
-    for key in $sss; do
+    for key in $(eval printf %s "\"\${(k)"$O"[*]}\""); do
         if [[ "$key" =~ $s ]]; then
-            # echo "1231132"
-            # echo "!!---! unset $O[\"\$key\"]"
-            eval "unset $O[\'\$key\']"
+            eval "unset \"${O}[$key]\""
             code=0
         fi
     done

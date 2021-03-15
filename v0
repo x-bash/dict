@@ -304,13 +304,13 @@ if [ -n "${BASH_VERSION}" ]; then
             xrc dict/_v0/str    ;;
         *)      
             # xrc dict/_v0/str;
-            xrc dict/_v0/bash4
-            # echo "!!!!" >&2
-            # . _v0/bash4  
+            # xrc dict/_v0/bash4
+            echo "!!!!" >&2
+            . _v0/bash4  
         ;;
     esac
 elif [ -n "${ZSH_VERSION}" ]; then
-    xrc dict/_v0/zsh
+    . ./_v0/zsh
 else
     xrc dict/std/str
 fi
