@@ -315,7 +315,7 @@ dict_pprint(){
 
 if [ -n "${BASH_VERSION}" ]; then
     case "${BASH_VERSION}" in
-        3*)     
+        3*|4.0*|4.1*)     
             xrc dict/_v0/str    ;;
         *)      
             # xrc dict/_v0/str;
