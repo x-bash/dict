@@ -48,7 +48,6 @@ dict_load(){
         read -d "${DICT_SEP}" -r key || return 0
         read -d "${DICT_SEP}" -r val || return 0
         eval "$O[\"\$key\"]=\"\$val\""
-        return
     done
 }
 
