@@ -96,13 +96,10 @@ dict_scope(){
     local key
     local i=0
     IFS="${DICT_SEP}"
-    local sss
-    sss="$(eval echo "\"\${!"$O"[*]}\"")"
 
-    for key in $sss; do
-        # echo "!!! $key" >&2
+    for key in $(eval printf %s "\"\${(k)"$O"[*]}\""); do
         if [[ "$key" == "$s"* ]]; then
-            val="$(eval echo "\"\${$O[\$key]}\"")"
+            val="$(eval printf "%s" "\"\${(v)"$O"[\$key]}\"")"
             printf "%s${DICT_SEP}%s${DICT_SEP}" "${key#$s}" "$val"
             i=$((i+1))
         fi
@@ -134,7 +131,6 @@ dict_drop(){
     local IFS="${DICT_KEYS_SEP}"
     local s
     s=$(printf "%s" "$*")
-    # echo "$s"
 
     IFS="${DICT_SEP}"
 
