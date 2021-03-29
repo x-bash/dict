@@ -47,8 +47,8 @@ dict_load(){
     local val
 
     while :; do
-        read -d "${DICT_SEP}" -r key
-        read -d "${DICT_SEP}" -r val
+        read -d "${DICT_SEP}" -r key || return 0
+        read -d "${DICT_SEP}" -r val || return 0
         eval "$O[\"\$key\"]=\"\$val\""
     done
 }
