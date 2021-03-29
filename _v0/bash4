@@ -3,14 +3,15 @@
 # author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
 
-# dict_make(){
-#     local O="${1:?Please provide object name}"
-#     unset "$O"
-#     eval "declare -A $O=()"
-#     eval "declare -p $O"
-# }
+dict_make(){
+    local O="${1:?Please provide object name}"
+    unset "$O"
+    eval "declare -gA $O"
+    eval "$O=()"
+    # eval "declare -p $O"
+}
 
-alias dict_make="declare -gA"
+# alias dict_make="declare -gA"
 
 # O=b dload "$( a.dump | dgrep "abc" | dgerp "abc" )"
 
@@ -41,13 +42,11 @@ dict_dump(){
 dict_load(){
     local O="${O:?Please provide object name}"
     dict_make "$O"
-
     local key
     local val
-
     while :; do
-        read -d "${DICT_SEP}" -r key
-        read -d "${DICT_SEP}" -r val
+        read -d "${DICT_SEP}" -r key || return 0
+        read -d "${DICT_SEP}" -r val || return 0
         eval "$O[\"\$key\"]=\"\$val\""
     done
 }
