@@ -42,14 +42,13 @@ dict_dump(){
 dict_load(){
     local O="${O:?Please provide object name}"
     dict_make "$O"
-
     local key
     local val
-
     while :; do
-        read -d "${DICT_SEP}" -r key
-        read -d "${DICT_SEP}" -r val
+        read -d "${DICT_SEP}" -r key || return 0
+        read -d "${DICT_SEP}" -r val || return 0
         eval "$O[\"\$key\"]=\"\$val\""
+        return
     done
 }
 
