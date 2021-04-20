@@ -13,13 +13,6 @@ test_dict_setup(){
     O=b dict_put 3 c
 }
 
-test_dict_load(){
-    unset b 
-    O=b dict_load
-    assert_t O=b dict_has 2
-    assert_f O=b dict_has 4
-}
-
 test_dict_has(){
     test_dict_setup
     assert_t O=b dict_has 2
