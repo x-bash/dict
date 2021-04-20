@@ -6,17 +6,16 @@
 # dict_make(){
 #     local O="${1:?Please provide object name}"
 #     unset "$O"
-#     eval "declare -A $O=()"
-#     eval "declare -p $O"
+#     eval "typeset -A $O=()"
 # }
 
-alias dict_make="declare -gA"
+alias dict_make="typeset -gA"
 
 # O=b dload "$( a.dump | dgrep "abc" | dgerp "abc" )"
 
 dict_clear(){
     local O="${O:?Please provide object name}"
-    eval "declare -A $O=()"
+    eval "typeset -A $O=()"
 }
 
 dict_dump(){
