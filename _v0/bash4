@@ -81,7 +81,7 @@ dict_put(){
 
     # echo "---> $key" >&2
     # echo "${O}[\"\$key\"]"="\"\$val\"" >&2
-    eval "${O}[\"\$key\"]"="\"\$val\""
+    eval "${O}[\"\$key\"]"="\"\$val\"" 2>/dev/null || dict_make "$O"; eval "${O}[\$key]"="\"\$val\""
 }
 
 # Not universal enough
