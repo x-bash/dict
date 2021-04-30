@@ -3,15 +3,8 @@
 # author:       Li Junhao           edwin.jh.lee@gmail.com    edwinjhlee.github.io
 # maintainer:   Li Junhao
 
-# dict_make(){
-#     local O="${1:?Please provide object name}"
-#     unset "$O"
-#     eval "typeset -A $O=()"
-# }
 
 alias dict_make="typeset -gA"
-
-# O=b dload "$( a.dump | dgrep "abc" | dgerp "abc" )"
 
 dict_clear(){
     local O="${O:?Please provide object name}"
@@ -26,33 +19,28 @@ dict_dump(){
 
     IFS="${DICT_SEP}"
     local sss
-    sss="$(eval echo "\"\${(k)$O}\"")"
-    for key in $sss; do
-        val="$(eval echo "\"\${$O[$key]}\"")"
+    for key val in $(eval echo "\"\${(kv)$O}\""); do
         printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
         i=$((i+1))
     done
     printf "%s" "$i"
 }
 
-# bash 4 means we 'read -d' is available
 dict_load(){
     local O="${O:?Please provide object name}"
     dict_make "$O"
     local key
     local val
-    
+
     while :; do
         read -d "${DICT_SEP}" -r key || return 0
         read -d "${DICT_SEP}" -r val || return 0
-        echo "$O[\"\$key\"]=\"\$val\"" >&2
         eval "$O[\"\$key\"]=\"\$val\""
     done
 }
 
 dict_size(){
     : "${O:?Please provide object name}"
-    # printf "%s" "$(eval "\$$O[#@]")"
     eval printf "%s" "\"\${#${O}[@]}\""
 }
 
@@ -117,7 +105,7 @@ dict_remove(){
     local key
     for key in $(eval printf %s "\"\${(k)"$O"[*]}\""); do
         if [[ "$key" = "$s" ]]; then
-            eval "unset \"${O}[$key]\""
+            eval "unset \"${O}[\$key]\""
             code=0
         fi
     done
@@ -136,7 +124,7 @@ dict_drop(){
     local key
     for key in $(eval printf %s "\"\${(k)"$O"[*]}\""); do
         if [[ "$key" =~ $s ]]; then
-            eval "unset \"${O}[$key]\""
+            eval "unset \"${O}[\$key]\""
             code=0
         fi
     done

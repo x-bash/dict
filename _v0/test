@@ -9,9 +9,9 @@ test_dict_setup(){
     dict_make b
     O=b dict_put 1 a
     O=b dict_put 2 b
-    # O=b dict_put "2 \" 3 " b
+    O=b dict_put "2 \" 3 " b
     O=b dict_put 3 c
-}
+} 
 
 test_dict_has(){
     test_dict_setup
@@ -21,7 +21,7 @@ test_dict_has(){
 
 test_dict_size(){
     test_dict_setup
-    assert "$(O=b dict_size)" = 3
+    assert "$(O=b dict_size)" = 4
 }
 
 test_dict_is_empty(){
@@ -37,6 +37,20 @@ test_dict_pget(){
     assert "$(O=b dict_get 2)" = b
 }
 
+test_dict_dump_json(){
+    test_dict_setup
+    assert_stdout "O=b dict_dump_json" <<A
+{
+  "3": "c",
+  "2 \" 3 ": "b",
+  "1": "a",
+  "2": "b"
+}
+A
+}
+
+# TODO:test_dict_load_json
+
 test_dict_pscope(){
     unset b
     dict_make b
@@ -46,8 +60,8 @@ test_dict_pscope(){
     O=b dict_put el password goforit
     O=b dict_put lt password 2008
     assert_stdout "O=b dict_scope el | dict_pprint" <<A
-user=edwinjhlee
 password=goforit
+user=edwinjhlee
 A
     assert_stdout "O=b dict_scope lt | dict_pjson" <<A
 {
