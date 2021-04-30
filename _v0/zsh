@@ -18,7 +18,6 @@ dict_dump(){
     local i=0
 
     IFS="${DICT_SEP}"
-    local sss
     for key val in $(eval echo "\"\${(kv)$O}\""); do
         printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
         i=$((i+1))
