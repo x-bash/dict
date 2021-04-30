@@ -325,7 +325,7 @@ if [ -n "${BASH_VERSION}" ]; then
         ;;
     esac
 elif [ -n "${ZSH_VERSION}" ]; then
-    xrc dict/_v0/zsh
+    source ./_v0/zsh
 else
     xrc dict/_v0/str
 fi

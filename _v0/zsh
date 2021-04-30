@@ -25,10 +25,9 @@ dict_dump(){
     local i=0
 
     IFS="${DICT_SEP}"
-    local sss
-    sss="$(eval echo "\"\${(k)$O}\"")"
-    for key in $sss; do
-        val="$(eval echo "\"\${$O[$key]}\"")"
+
+    for key in $(eval echo "\"\${(k)${O}}\""); do
+        val="$(eval echo "\"\${${O}[$key]}\"")"
         printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
         i=$((i+1))
     done
