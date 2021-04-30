@@ -26,8 +26,7 @@ dict_dump(){
 
     IFS="${DICT_SEP}"
     local sss
-    sss="$(eval echo "\"\${!"$O"[*]}\"")"
-
+    sss="$(eval echo "\"\${(k)$O}\"")"
     for key in $sss; do
         val="$(eval echo "\"\${$O[$key]}\"")"
         printf "%s${DICT_SEP}%s${DICT_SEP}" "$key" "$val"
